@@ -2,16 +2,19 @@
 # **********************************************************************)
 # * Programnév:       Password-manager app                             *)
 # * Fájlnév:          pwd_manager_en.py                                *)
-# * Verzió:           2.0                                              *)
+# * Verzió:           2.1                                              *)
 # * Leírás:           Jelszó-menedzser program - fájlkezeléssel        *)
 # * Készítette:       Kemenesi Ágoston                                 *)
 # * Készítés dátuma:  2020.12.14.                                      *)
-# * Utolsó módosítás: 2021.01.11.                                      *)
+# * Utolsó módosítás: 2021.01.14.                                      *)
 # *********************************************************************')
 
 from random import randint
 import time, json, os
 import pandas as pd  # to format a json file
+from tqdm import tqdm # to progress bar
+from time import sleep
+
 
 # ----------------- Variables ------------------
 
@@ -30,6 +33,12 @@ if os.path.exists('pwd.json'):
 # e.g. {"Agoston Kemenesi" : {"username": "ago", "password": "1234"}}
 
 # ----------------- Procedures --------------------
+
+# progress bar
+def progress_bar(max, step):
+    for i in tqdm(range(max)):
+        sleep(step)
+
 # Login or saving the master account
 def login_to_my_system():
     print('######                                                   ')
@@ -69,7 +78,7 @@ def login_to_my_system():
             }
 
             print('Saving data to database...')
-            time.sleep(2)
+            progress_bar(5, 0.2)
 
             with open('my_pwd.json', 'w') as target_file:
                 json.dump(my_account, target_file)
@@ -136,6 +145,8 @@ while 0 <= menu <= 4:
             with open('pwd.json', 'w') as target_file:
                 json.dump(accounts, target_file)
 
+            progress_bar(10, 0.2)
+
         waiting_for_the_user()
 
     if menu == 2:
@@ -166,6 +177,7 @@ while 0 <= menu <= 4:
             while length < password_length:
                 password = password + character_stuff[randint(0, len(character_stuff)-1)]
                 length += 1
+        progress_bar(password_length, 0.1)
         print('Generated password is: ', password)
         print('')
 
@@ -200,12 +212,13 @@ while 0 <= menu <= 4:
 
         print('')
         print('Saving data to database...')
-        time.sleep(1)
+        progress_bar(5, 0.1)
         print('Password changed successfully!')
 
         waiting_for_the_user()
 
     if menu == 0:
+        progress_bar(10, 0.1)
         print('You are logged out.')
         time.sleep(1)
         break
