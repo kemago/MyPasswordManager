@@ -1,1 +1,3 @@
-# MyPythonProjects
+## Password Manager Program
+# függvényekkel
+#json-kezeléssel
